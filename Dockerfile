@@ -1,5 +1,9 @@
 FROM node:12
 
+ARG ENVIRON1
+
+ENV ENVIRON=$ENVIRON1
+
 WORKDIR /app
 
 COPY package*.json /app/
