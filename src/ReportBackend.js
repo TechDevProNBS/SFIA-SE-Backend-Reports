@@ -14,7 +14,7 @@ let mongo = require('mongodb').MongoClient;
  * This is where to select the database that is referenced throughout the backend.
  */
 let allConfig = require('./config.json');
-let profile = allConfig.currentProfile;
+let profile = process.env.ENVIRON || allConfig.currentProfile;
 let config = allConfig[profile];
 let database = config.reports_database;
 
@@ -32,7 +32,7 @@ let dbCollection = database.collection;
 /**
  * Get request to return all reports.
  */
-app.get('/API/getReportList', function (req, res) {
+app.get('/API/reports/getReportList', function (req, res) {
     mongo.connect(url, function (err, client) {
         if (err) throw err;
         db = client.db(dbName);
@@ -47,7 +47,7 @@ app.get('/API/getReportList', function (req, res) {
 /**
  * Get request to return all reports that can be ordered by ascending or descending date.
  */
-app.get('/API/getReportListByDate/:order', function (req, res) {
+app.get('/API/reports/getReportListByDate/:order', function (req, res) {
     if (req.params.order === "asc") {
         var mysort = { date_created: 1 };
     } else if(req.params.order === "desc"){
@@ -67,7 +67,7 @@ app.get('/API/getReportListByDate/:order', function (req, res) {
 /**
  * Get request to return all reports that belong to a single user.
  */
-app.get('/API/getReportById/:id', function (req, res) {
+app.get('/API/reports/getReportById/:id', function (req, res) {
     let data = {
         _id: new mongodb.ObjectID(req.params.id)
     }
@@ -85,7 +85,7 @@ app.get('/API/getReportById/:id', function (req, res) {
 /**
  * Post request to create report. Expects JSON for data.
  */
-app.post('/API/postReport', function (req, res) {
+app.post('/API/reports/postReport', function (req, res) {
     data = req.body;
     mongo.connect(url, function (err, client) {
         if (err) {
