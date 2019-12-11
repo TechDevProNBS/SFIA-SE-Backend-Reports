@@ -10,8 +10,10 @@ pipeline {
 	}
             steps {
             echo "Testing"
-		sh 'docker image build --build-arg ENVIRON1="testing" -t="sebs2112/sfia-reports:testing" .'
-                sh 'docker push sebs2112/sfia-reports:testing' 
+		sh '. /home/manager/terraform-azure/ansible/ENV_VARIABLES.sh'
+		sh 'docker image build --build-arg ENVIRON1="testing" -t="10.0.5.4/5000:testing" .'
+                sh 'docker push 10.0.5.4/5000:testing' 
+		sh '/home/manager/terraform-azure/backEndUpdate.sh'
                 }
             }
 
@@ -23,8 +25,10 @@ pipeline {
 		}
 	}
             steps {
-		sh 'docker image build --build-arg ENVIRON1="staging" -t="sebs2112/sfia-reports:staging" .'
-                sh 'docker push sebs2112/sfia-reports:staging' 
+		sh '. /home/manager/terraform-azure/ansible/ENV_VARIABLES.sh'
+		sh 'docker image build --build-arg ENVIRON1="staging" -t="10.0.5.4/5000:staging" .'
+                sh 'docker push 10.0.5.4/5000:staging' 
+		sh '/home/manager/terraform-azure/backEndUpdate.sh'
                  echo "staging"
                 }
             }
@@ -38,8 +42,10 @@ pipeline {
 	}
             steps {
 		echo "production"
-               sh 'docker image build --build-arg ENVIRON1="production" -t="sebs2112/sfia-reports:production" .'
-                sh 'docker push sebs2112/sfia-reports:production' 
+		sh '. /home/manager/terraform-azure/ansible/ENV_VARIABLES.sh'
+                sh 'docker image build --build-arg ENVIRON1="production" -t="10.0.5.4/5000:production" .'
+                sh 'docker push 10.0.5.4/5000:production' 
+		sh '/home/manager/terraform-azure/backEndUpdate.sh'
             }
         }
 }
